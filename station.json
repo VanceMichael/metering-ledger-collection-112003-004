@@ -1,0 +1,306 @@
+{
+  "archive_per_shift": 1,
+  "feed_floor": {
+    "4": 2,
+    "5": 2,
+    "6": 2
+  },
+  "feed_compacted_days": [
+    "2026-11-20"
+  ],
+  "adjustment_code": "ADJ-EAST-20",
+  "lose_handoff_reply": [
+    "EAST"
+  ],
+  "refused": {
+    "OLD": [
+      "11:20",
+      "11:30"
+    ]
+  },
+  "live": {
+    "2026-11-19": [
+      {
+        "edition": "L19-1",
+        "known": 0,
+        "until": 2,
+        "pages": [
+          [
+            {
+              "id": "p16",
+              "day": "2026-11-19",
+              "port": "枪-A",
+              "start": "11:00",
+              "end": "11:40",
+              "kwh": "6.60"
+            }
+          ]
+        ]
+      }
+    ],
+    "2026-11-20": [
+      {
+        "edition": "L20-1",
+        "known": 0,
+        "until": 3,
+        "pages": [
+          [
+            {
+              "id": "m17",
+              "day": "2026-11-20",
+              "port": "枪-A",
+              "start": "11:20",
+              "end": "11:50",
+              "kwh": "4.80"
+            }
+          ],
+          [
+            {
+              "id": "z8",
+              "day": "2026-11-20",
+              "port": "枪-C",
+              "start": "12:00",
+              "end": "13:00",
+              "kwh": "2.30"
+            }
+          ]
+        ]
+      },
+      {
+        "edition": "L20-2",
+        "known": 1,
+        "until": 3,
+        "pages": [
+          [
+            {
+              "id": "m17",
+              "day": "2026-11-20",
+              "port": "枪-A",
+              "start": "11:20",
+              "end": "11:50",
+              "kwh": "4.80",
+              "split": [
+                [
+                  "OLD",
+                  "g18",
+                  "11:20",
+                  "11:30",
+                  "1.50"
+                ],
+                [
+                  "NEW",
+                  "g19",
+                  "11:30",
+                  "11:50",
+                  "3.30"
+                ]
+              ]
+            }
+          ],
+          [
+            {
+              "id": "z8",
+              "day": "2026-11-20",
+              "port": "枪-C",
+              "start": "12:00",
+              "end": "13:00",
+              "kwh": "2.30"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  "feed": [
+    {
+      "id": 1,
+      "known": 0,
+      "action": "record",
+      "row": {
+        "id": "n41",
+        "day": "2026-11-20",
+        "port": "枪-A",
+        "start": "11:20",
+        "end": "11:50",
+        "kwh": "4.80",
+        "split": [
+          [
+            "OLD",
+            "g18",
+            "11:20",
+            "11:30",
+            "1.50"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "known": 0,
+      "action": "record",
+      "row": {
+        "id": "n42",
+        "day": "2026-11-20",
+        "port": "枪-B",
+        "start": "12:05",
+        "end": "12:55",
+        "kwh": "1.20"
+      }
+    },
+    {
+      "id": 3,
+      "known": 1,
+      "action": "seal",
+      "day": "2026-11-20",
+      "edition": "N20-1",
+      "through": 2
+    },
+    {
+      "id": 4,
+      "known": 2,
+      "action": "record",
+      "row": {
+        "id": "t02",
+        "day": "2026-11-21",
+        "port": "枪-C",
+        "start": "09:00",
+        "end": "11:00",
+        "kwh": "2.40"
+      }
+    },
+    {
+      "id": 5,
+      "known": 3,
+      "action": "retract",
+      "day": "2026-11-20",
+      "ref": "n41"
+    },
+    {
+      "id": 6,
+      "known": 4,
+      "action": "seal",
+      "day": "2026-11-21",
+      "edition": "N21-1",
+      "through": 4
+    }
+  ],
+  "archives": {
+    "legacy": {
+      "2026-11-20": {
+        "edition": "LA20-2",
+        "includes": [
+          "2026-11-19",
+          "2026-11-20"
+        ],
+        "parts": [
+          {
+            "file": "legacy-19.ndjson",
+            "day": "2026-11-19",
+            "published": 3,
+            "rows": 1,
+            "sha256": "c490ce55746da0c9b4d9ae54d50fdf3b5ef0ca0f5f46da36ab179cedafbc3aba"
+          },
+          {
+            "file": "legacy-20a.ndjson",
+            "day": "2026-11-20",
+            "published": 3,
+            "rows": 1,
+            "sha256": "b373187a46aa9ad3102761114869ade5d2b5944c18b321dc3759487543112c0b"
+          },
+          {
+            "file": "legacy-20b.ndjson",
+            "day": "2026-11-20",
+            "published": 5,
+            "rows": 1,
+            "sha256": "b008a85295d15e81eb323c3d9c12aa2e5bb3d6d4e83ba1c2ca4b62b75032a763"
+          }
+        ]
+      },
+      "2026-11-19": {
+        "edition": "LA19-1",
+        "includes": [
+          "2026-11-19"
+        ],
+        "parts": [
+          {
+            "file": "legacy-19.ndjson",
+            "day": "2026-11-19",
+            "published": 3,
+            "rows": 1,
+            "sha256": "c490ce55746da0c9b4d9ae54d50fdf3b5ef0ca0f5f46da36ab179cedafbc3aba"
+          }
+        ]
+      }
+    },
+    "new": {
+      "2026-11-20": {
+        "edition": "NA20-2",
+        "includes": [
+          "2026-11-20",
+          "2026-11-21"
+        ],
+        "parts": [
+          {
+            "file": "new-20.ndjson",
+            "day": "2026-11-20",
+            "published": 5,
+            "rows": 1,
+            "sha256": "db7ac42cfd3a9866178a75ae4eae87e9b7b02efaf1a752769a5d162b58556b7b"
+          },
+          {
+            "file": "new-21.ndjson",
+            "day": "2026-11-21",
+            "published": 5,
+            "rows": 1,
+            "sha256": "68da321c074b8c87609a2af52fbdb704b244cda3daa68eea514db5fd8c7ba2f8"
+          }
+        ]
+      },
+      "2026-11-21": {
+        "edition": "NA21-1",
+        "includes": [
+          "2026-11-21"
+        ],
+        "parts": [
+          {
+            "file": "new-21.ndjson",
+            "day": "2026-11-21",
+            "published": 5,
+            "rows": 1,
+            "sha256": "68da321c074b8c87609a2af52fbdb704b244cda3daa68eea514db5fd8c7ba2f8"
+          }
+        ]
+      }
+    }
+  },
+  "reading": [
+    {
+      "meter": "OLD",
+      "epoch": "g18",
+      "known": 0,
+      "window": "2026-11-20",
+      "file": "old.json"
+    },
+    {
+      "meter": "NEW",
+      "epoch": "g19",
+      "known": 2,
+      "window": "2026-11-20",
+      "file": "new.json"
+    },
+    {
+      "meter": "EAST",
+      "epoch": "g1",
+      "known": 0,
+      "window": "2026-11-20",
+      "file": "east.json"
+    },
+    {
+      "meter": "EAST",
+      "epoch": "g1",
+      "known": 4,
+      "window": "2026-11-20",
+      "file": "east-corrected.json"
+    }
+  ]
+}

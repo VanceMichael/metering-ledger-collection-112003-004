@@ -2,19 +2,35 @@
   {
     "id": "B9",
     "links": [
-      "m17",
-      "n41"
+      [
+        "legacy",
+        "m17"
+      ],
+      [
+        "new",
+        "n41"
+      ]
     ],
+    "day": "2026-11-20",
+    "known": 0,
     "state": "active",
-    "rev": 1
+    "revision": 1
   },
   {
     "id": "B9",
     "links": [
-      "m17",
-      "n41"
+      [
+        "legacy",
+        "m17"
+      ],
+      [
+        "new",
+        "n41"
+      ]
     ],
+    "day": "2026-11-20",
+    "known": 3,
     "state": "withdrawn",
-    "rev": 2
+    "revision": 2
   }
 ]

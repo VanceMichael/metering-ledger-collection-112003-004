@@ -1,45 +1,85 @@
-from pathlib import Path
-from threading import Thread
 import json
+from hashlib import sha256
+from threading import Thread
 import unittest
 from urllib.error import HTTPError
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 
 from source_service import create_source
 
 
-class SourceTest(unittest.TestCase):
+class StationTest(unittest.TestCase):
     def setUp(self):
         self.server = create_source()
-        self.thread = Thread(target=self.server.serve_forever, kwargs={"poll_interval": .01}, daemon=True)
-        self.thread.start()
+        thread = Thread(target=self.server.serve_forever, kwargs={"poll_interval": .01}, daemon=True)
+        thread.start()
         self.base = f"http://127.0.0.1:{self.server.server_port}"
         self.addCleanup(self.server.server_close)
-        self.addCleanup(self.thread.join, 2)
+        self.addCleanup(thread.join, 2)
         self.addCleanup(self.server.shutdown)
 
-    def source_response(self, path):
+    def exchange(self, path, payload=None, headers=None):
+        request = Request(self.base + path, data=json.dumps(payload).encode() if payload is not None else None,
+                          headers=headers or {})
         try:
-            with urlopen(self.base + path, timeout=2) as response:
-                return response.status, response.read()
+            response = urlopen(request, timeout=2)
         except HTTPError as error:
-            with error:
-                return error.code, error.read()
+            response = error
+        with response:
+            body = response.read()
+            if response.headers["Content-Type"].startswith("application/json"):
+                body = json.loads(body)
+            return response.code, response.headers, body
 
-    def test_input_documents(self):
-        for name in ['switch', 'bridges', 'account']:
-            with self.subTest(document=name):
-                value = Path("data", name + ".json").read_text(encoding="utf-8")
-                self.assertTrue(json.loads(value))
+    def advance(self, shift):
+        self.assertEqual(self.exchange("/time", {"shift": shift})[0], 200)
 
-    def test_receiving_responses(self):
-        status, catalog = self.source_response('/live/2026-11-20')
+    def test_live_cursor_fails_after_revision_and_archive_shares_adjacent_day(self):
+        day = "2026-11-20"
+        first = self.exchange(f"/legacy/day?day={day}")[2]
+        self.advance(1)
+        cursor = f"/legacy/day?day={day}&edition={first['edition']}&cursor={first['next']}"
+        self.assertEqual(self.exchange(cursor)[0], 409)
+        self.advance(3)
+        self.assertEqual(self.exchange(f"/legacy/day?day={day}")[0], 410)
+        request = {"operator": "legacy", "day": day, "token": "J-A"}
+        self.assertEqual(self.exchange("/archive/jobs", request)[0], 202)
+        self.assertEqual(self.exchange("/archive/jobs", request)[0], 200)
+        self.assertEqual(self.exchange("/archive/jobs", {**request, "token": "J-B"})[0], 429)
+        self.advance(4)
+        result = self.exchange("/archive/job/J-A")[2]
+        self.assertEqual(result["state"], "forming")
+        self.assertIn("2026-11-19", result["includes"])
+        self.assertEqual(self.exchange("/archive/content/legacy-20b.ndjson?job=J-A")[0], 404)
+        self.advance(5)
+        part = self.exchange("/archive/job/J-A")[2]["parts"][-1]
+        status, headers, raw = self.exchange("/archive/content/" + part["file"] + "?job=J-A")
         self.assertEqual(status, 200)
-        self.assertIn('next', json.loads(catalog))
-        status, payload = self.source_response('/archive/2026-11-20')
-        self.assertEqual(status, 202)
-        self.assertTrue(payload)
-        status, payload = self.source_response('/archive/2026-11-20')
-        self.assertEqual(status, 200)
-        self.assertEqual(json.loads(payload)['covers'], ['2026-11-20'])
+        self.assertEqual(part["sha256"], sha256(raw).hexdigest())
+        self.assertEqual(headers["X-Content-SHA256"], part["sha256"])
 
+    def test_compacted_feed_does_not_claim_a_complete_day(self):
+        first = self.exchange("/new/feed?after=0")[2]
+        self.assertEqual([event["id"] for event in first["events"]], [1, 2])
+        self.advance(4)
+        self.assertEqual(self.exchange("/new/feed?after=0")[2]["affected_days"], ["2026-11-20"])
+        resumed = self.exchange("/new/feed?after=2")[2]
+        self.assertEqual([event["action"] for event in resumed["events"]], ["seal", "record", "retract"])
+        self.assertTrue(resumed["more"])
+
+    def test_certification_and_handoff_advance_independently(self):
+        url = "/meter?meter=NEW&epoch=g19&window=2026-11-20"
+        self.assertEqual(self.exchange(url)[0], 202)
+        self.advance(2)
+        self.assertEqual(self.exchange(url)[2]["bottoms"][0], ["11:30", "0.10"])
+        record = {"request":"PK1", "meter":"EAST", "window":"2026-11-20", "type":"initial",
+                  "energy":"2.30", "documents":["M4","g1-r1"]}
+        self.assertEqual(self.exchange("/account/handoff", record)[0], 503)
+        self.assertEqual(self.exchange("/account/result/PK1")[0],404)
+        self.advance(3)
+        self.assertEqual(self.exchange("/account/result/PK1")[2]["state"], "received")
+        self.advance(4)
+        self.assertEqual(self.exchange("/account/result/PK1")[2]["state"], "posted")
+        now = self.exchange("/meter?meter=EAST&epoch=g1&window=2026-11-20")[2]
+        self.assertEqual(now["revision"], "2")
+        self.assertEqual(self.exchange("/account/result/PK1")[2]["input"]["energy"], "2.30")

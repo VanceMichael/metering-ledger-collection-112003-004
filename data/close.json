@@ -1,0 +1,36 @@
+[
+  {
+    "meter": "OLD",
+    "epoch": "g18",
+    "day": "2026-11-20",
+    "required": [
+      "legacy",
+      "new"
+    ],
+    "cutoff": 4
+  },
+  {
+    "meter": "NEW",
+    "epoch": "g19",
+    "day": "2026-11-20",
+    "required": [
+      "legacy",
+      "new"
+    ],
+    "cutoff": 5
+  },
+  {
+    "meter": "EAST",
+    "epoch": "g1",
+    "day": "2026-11-20",
+    "required": [
+      "legacy"
+    ],
+    "cutoff": 3,
+    "independent": true,
+    "adjustment_approval": {
+      "known": 6,
+      "code": "ADJ-EAST-20"
+    }
+  }
+]

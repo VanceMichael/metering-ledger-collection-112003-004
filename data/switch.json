@@ -2,28 +2,65 @@
   {
     "id": "M1",
     "port": "枪-A",
-    "until": "2026-11-20T11:30:00+08:00",
+    "window": "2026-11-20",
+    "known": 0,
+    "from": "10:00",
+    "until": "11:30",
     "meter": "OLD",
-    "start": "438.50",
-    "end": "442.00"
+    "epoch": "g18"
   },
   {
     "id": "M2",
     "port": "枪-A",
-    "from": "2026-11-20T11:30:00+08:00",
+    "window": "2026-11-20",
+    "known": 0,
+    "from": "11:30",
+    "until": "22:00",
     "meter": "NEW",
-    "start": "0.10"
+    "epoch": "g19"
   },
   {
     "id": "M3",
     "port": "枪-B",
+    "window": "2026-11-20",
+    "known": 0,
+    "from": "11:30",
+    "until": "22:00",
     "meter": "NEW",
-    "from": "2026-11-20T11:30:00+08:00"
+    "epoch": "g19"
   },
   {
     "id": "M4",
     "port": "枪-C",
+    "window": "2026-11-20",
+    "known": 0,
+    "from": "10:00",
+    "until": "20:00",
     "meter": "EAST",
-    "start": "122.00"
+    "epoch": "g1"
+  },
+  {
+    "id": "M5",
+    "port": "枪-A",
+    "window": "2026-11-20",
+    "known": 4,
+    "interval_uncertain": [
+      "11:29",
+      "11:31"
+    ],
+    "replaces": [
+      "M1",
+      "M2"
+    ],
+    "candidates": [
+      [
+        "OLD",
+        "g18"
+      ],
+      [
+        "NEW",
+        "g19"
+      ]
+    ]
   }
 ]
