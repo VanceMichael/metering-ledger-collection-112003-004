@@ -1,0 +1,20 @@
+[
+  {
+    "id": "B9",
+    "links": [
+      "m17",
+      "n41"
+    ],
+    "state": "active",
+    "rev": 1
+  },
+  {
+    "id": "B9",
+    "links": [
+      "m17",
+      "n41"
+    ],
+    "state": "withdrawn",
+    "rev": 2
+  }
+]

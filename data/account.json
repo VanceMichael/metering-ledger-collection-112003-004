@@ -1,0 +1,21 @@
+[
+  {
+    "id": "PAY4",
+    "action": "return",
+    "meter": "OLD",
+    "span": [
+      "10:00",
+      "11:30"
+    ]
+  },
+  {
+    "id": "PAY5",
+    "action": "posted",
+    "meter": "EAST",
+    "energy": "2.30",
+    "documents": [
+      "M4",
+      "meter/east.json"
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "meter": "EAST",
+  "replaces": "meter/east.json",
+  "bottoms": [
+    [
+      "10:00",
+      "122.00"
+    ],
+    [
+      "20:00",
+      "124.50"
+    ]
+  ]
+}
